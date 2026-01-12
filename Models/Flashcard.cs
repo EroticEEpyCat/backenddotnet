@@ -1,0 +1,12 @@
+﻿namespace webdotnetapp.Models
+{
+    public class Flashcard
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public int CollectionId { get; set; }
+        public Collection Collection { get; set; }
+        public List<FlashcardTag> FlashcardTags { get; set; }
+    }
+}
