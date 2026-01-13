@@ -12,12 +12,12 @@ namespace webdotnetapp.Controllers
         private readonly AppDbContext _context;
         public CollectionsController(AppDbContext context) => _context = context;
 
-        // GET all collections
+
         [HttpGet]
         public async Task<IActionResult> GetCollections() =>
             Ok(await _context.Collections.ToListAsync());
 
-        // POST create collection
+
         [HttpPost]
         public async Task<IActionResult> CreateCollection([FromBody] Collection collection)
         {
@@ -29,7 +29,7 @@ namespace webdotnetapp.Controllers
             return Ok(collection);
         }
 
-        // PUT update collection
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCollection(int id, [FromBody] Collection updated)
         {
@@ -44,7 +44,6 @@ namespace webdotnetapp.Controllers
             return Ok(col);
         }
 
-        // DELETE collection
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCollection(int id)
         {

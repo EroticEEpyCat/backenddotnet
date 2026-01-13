@@ -20,8 +20,14 @@
                 entity.HasKey(u => u.Id);
                 entity.Property(u => u.Username).IsRequired().HasMaxLength(50);
                 entity.Property(u => u.Email).IsRequired().HasMaxLength(100);
-                entity.HasMany(u => u.Collections).WithOne(c => c.User).HasForeignKey(c => c.UserId);
+
+                
+                entity.HasMany(u => u.Collections)
+                      .WithOne(c => c.User)
+                      .HasForeignKey(c => c.UserId)
+                      .IsRequired(false);
             });
+
 
             modelBuilder.Entity<Collection>(entity =>
             {

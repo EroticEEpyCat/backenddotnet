@@ -17,7 +17,7 @@
         <div class="row">
             <div class="col-md-6 col-sm-12">
 
-                <!-- ADD COLLECTION -->
+
                 <div class="form-group col-md-4 mb-0 first-col white">
                     <input type="text" class="form-control customborder white" id="addInp" placeholder="New collection name">
                     <button id="addBtn" class="btn btn-primary customborder mt-1">ADD COLLECTION</button>
@@ -28,7 +28,6 @@
 
                 <select class="form-control customborder tall" id="collection" size="10"></select>
 
-                <!-- EDIT / DELETE COLLECTION -->
                 <div class="form-group col-md-4 mb-0 first-col mt-2">
                     <input type="text" class="form-control customborder white" id="editInp" placeholder="Edit selected collection">
                     <button id="editBtn" class="btn btn-warning customborder mt-1">EDIT</button>
@@ -48,10 +47,9 @@
             const editBtn = document.getElementById('editBtn');
             const deleteBtn = document.getElementById('deleteBtn');
 
-            // Load collections initially
+
             loadCollections();
 
-            // ---------------- CREATE ----------------
             addBtn.addEventListener('click', function () {
                 const name = addInp.value.trim();
                 if (!name) return alert("Enter collection name");
@@ -69,7 +67,7 @@
                     .catch(err => alert(err));
             });
 
-            // ---------------- UPDATE ----------------
+
             editBtn.addEventListener('click', function () {
                 const selectedId = collectionSelect.value;
                 const name = editInp.value.trim();
@@ -90,7 +88,7 @@
                     .catch(err => alert(err.message));
             });
 
-            // ---------------- DELETE ----------------
+
             deleteBtn.addEventListener('click', function () {
                 const selectedId = collectionSelect.value;
                 if (!selectedId) return alert("Select a collection to delete");
@@ -107,7 +105,6 @@
                     .catch(err => alert(err.message));
             });
 
-            // ---------------- FUNCTIONS ----------------
             function loadCollections() {
                 fetch('/api/collections')
                     .then(res => res.json())
@@ -123,7 +120,6 @@
                     .catch(err => console.error(err));
             }
 
-            // Fill edit input when selection changes
             collectionSelect.addEventListener('change', function () {
                 const selectedOption = collectionSelect.selectedOptions[0];
                 editInp.value = selectedOption ? selectedOption.textContent : "";
