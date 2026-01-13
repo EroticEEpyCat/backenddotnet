@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <link rel="stylesheet" href="data/style.css">
+    <title>FLASHCARDS</title>
+</head>
+
+
+<body>
+    <div class="container">
+       <div class="row">
+        <div class="col-1 avg left"><a id="returnbtn" href="index.html"><</a></div>
+        <div class="col-10 big center">library</div>
+       </div>   
+        <div class="row pt flashcard">
+            <button id="prevCollection" class="col-1 avg switchcard"><</button>
+            <div class="col-lg-6 col-md-8 col-sm-8  content">
+                <a href="#" id="collectionName" class="cardname">Collection Name</a>
+                <textarea id="cardDescription" readonly></textarea>
+                <div id="counter">0/0</div>
+            </div>
+            <button id="nextCollection" class="col-1 avg switchcard">></button>
+
+        </div>
+    </div>
+
+    <button id="modeicon">
+        <img id = "sun" src="data/img/sun.png" alt="light/dark mode icon">
+        <img id = "moon" src="data/img/moon.png" alt="light/dark mode icon">
+    </button>
+    
+</body>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const prevBtn = document.getElementById('prevCollection');
+    const nextBtn = document.getElementById('nextCollection');
+    const nameBtn = document.getElementById('collectionName');
+    const descriptionArea = document.getElementById('cardDescription');
+    const counter = document.getElementById('counter');
+
+    const data = JSON.parse(localStorage.getItem('flashcardsData')) || {};
+    const urlParams = new URLSearchParams(window.location.search);
+    const forcedCollection = urlParams.get('collection');
+
+    let collectionNames = Object.keys(data);
+    let currentCollectionIndex = 0;
+    let currentCardIndex = 0;
+
+    function showCollection(index) {
+      const collection = collectionNames[index];
+      const cards = data[collection];
+
+      nameBtn.textContent = collection;
+      nameBtn.href = `library.html?collection=${collection}`
+      descriptionArea.value = cards.map(card =>
+        `${card.name}`
+      ).join('\n----------------------\n');
+      counter.textContent = `${index + 1}/${collectionNames.length}`;
+    }
+
+    function showFlashcard(collectionName, cardIndex) {
+      const cards = data[collectionName];
+
+      if (!cards || cards.length === 0) {
+        nameBtn.textContent = collectionName;
+        descriptionArea.value = 'No flashcards in this collection.';
+        counter.textContent = '0/0';
+        return;
+      }
+
+      const card = cards[cardIndex];
+      nameBtn.textContent = collectionName + ' — ' + card.name;
+      descriptionArea.value = card.description;
+      counter.textContent = `${cardIndex + 1}/${cards.length}`;
+    }
+
+    if (forcedCollection && data[forcedCollection]) {
+      
+      showFlashcard(forcedCollection, currentCardIndex);
+
+      prevBtn.addEventListener('click', () => {
+        const total = data[forcedCollection].length;
+        currentCardIndex = (currentCardIndex - 1 + total) % total;
+        showFlashcard(forcedCollection, currentCardIndex);
+      });
+
+      nextBtn.addEventListener('click', () => {
+        const total = data[forcedCollection].length;
+        currentCardIndex = (currentCardIndex + 1) % total;
+        showFlashcard(forcedCollection, currentCardIndex);
+      });
+    } else {
+      if (collectionNames.length === 0) {
+        nameBtn.textContent = 'No Collections';
+        descriptionArea.value = 'No flashcards saved.';
+        counter.textContent = '0/0';
+        return;
+      }
+
+      showCollection(currentCollectionIndex);
+
+      prevBtn.addEventListener('click', () => {
+        currentCollectionIndex = (currentCollectionIndex - 1 + collectionNames.length) % collectionNames.length;
+        showCollection(currentCollectionIndex);
+      });
+
+      nextBtn.addEventListener('click', () => {
+        currentCollectionIndex = (currentCollectionIndex + 1) % collectionNames.length;
+        showCollection(currentCollectionIndex);
+      });
+    }
+  });
+</script>
+
+
+
+
+</html>
+

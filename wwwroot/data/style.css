@@ -1,0 +1,266 @@
+@import url('https://fonts.googleapis.com/css2?family=Bungee+Shade&family=VT323&display=swap');
+
+
+html, body{
+    font-family: "Bungee Shade";
+    background-color: #151515;
+    color: #E5FF00;
+    user-select: none;
+    margin: 0;
+    padding: 0;
+    
+}
+#loadblur{
+    animation: 1s ease-out 0s 1 loadpage;
+}
+
+#returnbtn{
+    color: #FFF;
+}
+
+.big {
+    font-size: 110px;
+}
+
+.center{
+    text-align: center;
+}
+
+.left{
+    text-align: left;
+}
+.avg{
+    font-size: 70px;
+}
+
+a{
+    transition: all 1.5s;
+    text-decoration: none;
+    color: #E5FF00;
+}
+
+a:hover{
+    color: #FFF;
+}
+
+.pt{
+    padding-top: 5rem;
+}
+
+
+#modeicon{
+    all: unset;
+    position: fixed;
+    bottom: 10px;
+    left: 0;
+    cursor: pointer;
+}
+
+#modeicon img {
+    height: 60px;
+    width: 60px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    
+}
+
+#sun{
+    filter: brightness(1.2) sepia(1) hue-rotate(10deg) saturate(15);
+    transition: all 1s;
+}
+
+#sun:hover{
+    filter: none;
+    
+}
+
+#moon{
+    visibility: hidden;
+}
+
+
+.flashcard{
+    display: flex;
+    justify-content:center;
+    gap: 1rem;
+    flex-direction: row;
+    margin: -2rem 8rem 0 8rem;
+    align-items:center;
+    overflow: hidden;
+    text-align: center;
+
+
+}
+
+
+option{
+    color: #E5FF00;
+}
+
+
+option:checked{
+    color: #FFF;
+    background-color: #151515;
+}
+
+
+#counter{
+    margin-top: 10%;
+    font-size: 30px;
+}
+
+#collection{
+    overflow: auto;              
+    resize: none;                   
+    scrollbar-width: none;         
+    -ms-overflow-style: none;
+}
+
+
+
+#cardDescription{
+    font-size: 20px;
+    filter: blur(5px);
+    margin-top: 8%;
+    text-align: center;
+    width: 100%;
+    color:#E5FF00;
+    background-color: #151515;
+    border: none;
+    height: 12rem;                  
+    overflow: auto;              
+    resize: none;                   
+    scrollbar-width: none;         
+    -ms-overflow-style: none;
+    outline:  none;
+    transition: all .5s;
+}
+
+#cardDescription:focus{
+    filter: none;
+}
+
+
+.switchcard{
+    all: unset;
+    font-size: 70px;
+    transition: all 1s;
+
+}
+
+.switchcard:hover{
+    color:#FFF;
+
+}
+
+
+
+
+.content{
+    border: #E5FF00 2px solid;
+    border-radius: 2rem;
+    min-height: 28rem;
+}
+
+.first-col{
+    margin-top: 2rem;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+
+}
+
+#submitbtn{
+    max-width: 200px;
+    transition: all 1s;
+    color:#E5FF00
+}
+
+#submitbtn:hover{
+    background-color:#151515;
+}
+
+
+
+
+.cardname{
+    margin-top: 5rem !important;
+    background-color: #151515;
+    color: #E5FF00;
+    border: none;
+    text-align: center;
+    font-size: 40px;
+    transition: all 1s;
+    width: auto !important;
+    max-width: 100%;
+    white-space: normal;
+    word-break: break-word;
+
+}
+.cardname:hover{
+    color: #FFF;
+}
+
+
+
+
+#bottomline{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 3rem;
+    gap: 10px;
+    
+}
+
+
+.customborder{
+    background-color: #151515;
+    border:#E5FF00 solid 2px;
+    color: #FFF
+}
+
+.customborder:focus{
+    background-color: #151515;
+    border:#E5FF00 solid 2px;
+    color: #FFF
+}
+
+
+#form{
+    font-size: 40px;
+}
+
+.tall{
+    height: 20rem;
+}
+
+
+@media (max-width: 800px) {
+  #bottomline {
+    flex-direction: column;
+  }
+  .big{
+    font-size: 50px;
+  }
+  .flashcard{
+    margin: -4rem 0 0 0;
+  }
+  .avg{
+    font-size: 40px;
+  }
+  #modeicon{
+    
+  }
+}
+
+@keyframes loadpage {
+  0% {
+    filter: blur(3px);
+
+  }
+  100% {
+
+    filter: blur(0);
+  }
+}
