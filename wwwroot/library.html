@@ -29,10 +29,7 @@
         </div>
     </div>
 
-    <button id="modeicon">
-        <img id = "sun" src="data/img/sun.png" alt="light/dark mode icon">
-        <img id = "moon" src="data/img/moon.png" alt="light/dark mode icon">
-    </button>
+
     
 </body>
 
@@ -45,7 +42,14 @@
     const descriptionArea = document.getElementById('cardDescription');
     const counter = document.getElementById('counter');
 
-    const data = JSON.parse(localStorage.getItem('flashcardsData')) || {};
+    fetch('/api/collections')
+        .then(res => res.json())
+        .then(collections => {
+            collectionNames = collections;
+            showCollection(0);
+        });
+
+
     const urlParams = new URLSearchParams(window.location.search);
     const forcedCollection = urlParams.get('collection');
 
@@ -66,7 +70,12 @@
     }
 
     function showFlashcard(collectionName, cardIndex) {
-      const cards = data[collectionName];
+        fetch(`/api/flashcards/collection/${collectionId}`)
+            .then(res => res.json())
+            .then(cards => {
+                showFlashcardFromApi(cards);
+            });
+
 
       if (!cards || cards.length === 0) {
         nameBtn.textContent = collectionName;

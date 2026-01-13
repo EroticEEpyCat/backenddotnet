@@ -13,129 +13,123 @@
 
 <body>
     <div class="container">
-       <div class="row">
-        <div class="col-1 avg left"><a id="returnbtn" href="index.html"><</a></div>
-        <div class="col-10 big center">ADD NEW</div>
-       </div>
+        <div class="row">
+            <div class="col-1 avg left"><a id="returnbtn" href="index.html"><</a></div>
+            <div class="col-10 big center">ADD NEW</div>
+        </div>
 
         <div class="row">
-        <form id="form">
-            <div class="form-row ">
+            <form id="form">
+                <div class="form-row ">
 
 
 
-            <div class="form-group col-md-4 mb-0 first-col">
-                <label for="name">NAME</label>
-                <input type="text" class="form-control customborder" id="name" placeholder="">
-                <button id="submitbtn" type="submit" class="btn btn-primary customborder ">Save</button>
-            
-            </div>
+                    <div class="form-group col-md-4 mb-0 first-col">
+                        <label for="name">NAME</label>
+                        <input type="text" class="form-control customborder" id="name" placeholder="">
+                        <button id="submitbtn" type="submit" class="btn btn-primary customborder ">Save</button>
 
-            </div>
-            <div id="bottomline">
-             
-                <div id = "descHolder" class="form-group col-md-6 col-sm-12">
-                    <label for="description">Description:</label>
-                    <textarea type="text" class="form-control customborder tall" id="description" placeholder="" ></textarea>
+                    </div>
+
+                </div>
+                <div id="bottomline">
+
+                    <div id="descHolder" class="form-group col-md-6 col-sm-12">
+                        <label for="description">Description:</label>
+                        <textarea type="text" class="form-control customborder tall" id="description" placeholder=""></textarea>
+                    </div>
+
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="collection">Collection↓</label>
+                        <select class="form-control customborder tall" id="collection" size="10">
+                        </select>
+                    </div>
                 </div>
 
-                <div class="form-group col-md-6 col-sm-12">
-                    <label for="collection">Collection↓</label>
-                    <select class="form-control customborder tall" id="collection" size="10">
-                        <option>+</option>                        
-                    </select>
-                </div>
-            </div>
-
-        </form>
+            </form>
         </div>
 
     </div>
 
-    <button id="modeicon">
-        <img id = "sun" src="data/img/sun.png" alt="light/dark mode icon">
-        <img id = "moon" src="data/img/moon.png" alt="light/dark mode icon">
-    </button>
 
 
 
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const form = document.getElementById('form');
-    const nameInput = document.getElementById('name');
-    const descriptionInput = document.getElementById('description');
-    const collectionSelect = document.getElementById('collection');
-    const submitBtn = document.getElementById('submitbtn');
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
 
-    loadCollections();
+            const form = document.getElementById('form');
+            const nameInput = document.getElementById('name');
+            const descriptionInput = document.getElementById('description');
+            const collectionSelect = document.getElementById('collection');
 
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
+            // Load collections when page opens
+            loadCollections();
 
-      let name = nameInput.value.trim();
-      let description = descriptionInput.value.trim();
-      let selectedCollection = collectionSelect.value;
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
 
-      if (name === "" || description === "" || selectedCollection === "") {
-        alert("Please fill in all the options!");
-        return;
-      }
+                const name = nameInput.value.trim();
+                const description = descriptionInput.value.trim();
+                const selectedCollection = collectionSelect.value;
 
-      if (selectedCollection === '+') {
-        const newCollection = prompt("Please enter a new collection's name:", "Collection name");
+                if (name === "" || description === "" || selectedCollection === "") {
+                    alert("Please fill in all the options!");
+                    return;
+                }
 
-        if (!newCollection || newCollection.trim() === "") {
-          alert("Invalid collection name, try again.");
-          return;
-        }
+                fetch('/api/flashcards', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        description: description,
+                        collectionId: parseInt(selectedCollection)
+                    })
+                })
+                    .then(res => {
+                        if (!res.ok) {
+                            throw new Error("Failed to save flashcard");
+                        }
+                        return res.json();
+                    })
+                    .then(() => {
+                        alert("Flashcard saved!");
+                        form.reset();
+                    })
+                    .catch(err => alert(err.message));
+            });
 
-        selectedCollection = newCollection.trim();
-        addCollectionOption(selectedCollection);
-      }
+            // ---------------- FUNCTIONS ----------------
 
-      let allData = JSON.parse(localStorage.getItem('flashcardsData')) || {};
+            function loadCollections() {
+                fetch('/api/collections')
+                    .then(res => res.json())
+                    .then(collections => {
+                        collectionSelect.innerHTML = ""; // clear old options
+                        for (const collection of collections) {
+                            addCollectionOption(collection);
+                        }
+                    })
+                    .catch(err => console.error(err));
+            }
 
-      if (!allData[selectedCollection]) {
-        allData[selectedCollection] = [];
-      }
-
-      allData[selectedCollection].push({ name, description });
-
-      localStorage.setItem('flashcardsData', JSON.stringify(allData));
-
-      alert("Flashcard saved!");
-
-      form.reset();
-    });
-
-    function loadCollections() {
-      const data = JSON.parse(localStorage.getItem('flashcardsData')) || {};
-      collectionSelect.innerHTML = '<option>+</option>'; 
-
-      for (const collectionName in data) {
-        addCollectionOption(collectionName);
-      }
-    }
-
-    function addCollectionOption(name) {
-      const option = document.createElement('option');
-      option.textContent = name;
-      option.value = name;
-      collectionSelect.appendChild(option);
-    }
-  });
-</script>
+            function addCollectionOption(col) {
+                const option = document.createElement('option');
+                option.textContent = col.name;
+                option.value = col.id;
+                collectionSelect.appendChild(option);
+            }
+        });
+    </script>
 
 
 
 
-    
 </body>
 
 
 
-
-
-
-</html>
+</html >
 
